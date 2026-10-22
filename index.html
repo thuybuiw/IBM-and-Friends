@@ -622,67 +622,68 @@ const FULL_PAIRS_SEED = {
 /* ═══════════════════════════════════════════════════
    LỊCH 36 TRẬN — 9 ĐỢT × 4 SÂN — MỖI ĐỢT ĐỦ 3 ĐỘI
    Pair ids: A=1–12, B=13–24, C=25–36
-   Mỗi đợt: đủ 3 loại AB + AC + BC (mỗi loại ≥1 trận).
-   Mỗi cặp thi đúng 2 trận, không thi 2 trận cùng đợt.
+   Thi đấu NGANG HÀNG: cặp hạng k của mỗi đội chỉ gặp cặp hạng k của hai đội kia
+   (Ak–Bk, Ak–Ck, Bk–Ck, k=1..12) → 12×3 = 36 trận, mỗi cặp thi đúng 2 trận.
+   Mỗi đợt: đủ 3 loại AB + AC + BC (mỗi loại ≥1 trận), không ai thi 2 trận cùng đợt.
    Các cặp có Phát (B10, B11, B12) chỉ xếp từ đợt 4 (14:00) trở đi, mỗi đợt tối đa 1 trận có Phát.
-   Đã verified bằng script: tất cả 9 đợt hợp lệ ✓
+   Đã verified bằng script ✓
 ═══════════════════════════════════════════════════ */
 const SCHEDULE = [
-  /* ── ĐỢT 1: 1AB+2AC+1BC ── */
-  {id:1, round:1, court:1, pairA:4, pairB:17},  /* A4(Hà+Khoa) vs B5(Trang+Đông) [AB] */
-  {id:2, round:1, court:2, pairA:3, pairB:28},  /* A3(Quang+Yên) vs C4(Cường+Tường) [AC] */
-  {id:3, round:1, court:3, pairA:8, pairB:32},  /* A8(Quí+Nguyên) vs C8(Tú+Trang Lu) [AC] */
-  {id:4, round:1, court:4, pairA:19, pairB:33},  /* B7(Thảo+Phong) vs C9(Duy+Trâm) [BC] */
-  /* ── ĐỢT 2: 1AB+2AC+1BC ── */
-  {id:5, round:2, court:1, pairA:6, pairB:18},  /* A6(Quang+Khoa) vs B6(Hiền+Đông) [AB] */
-  {id:6, round:2, court:2, pairA:9, pairB:33},  /* A9(Quí+Thụy) vs C9(Duy+Trâm) [AC] */
-  {id:7, round:2, court:3, pairA:10, pairB:34},  /* A10(Tín+Nguyên) vs C10(Cường+Tú) [AC] */
-  {id:8, round:2, court:4, pairA:13, pairB:25},  /* B1(Trang+Giang (Ginny RH)) vs C1(Hạnh+Tường) [BC] */
+  /* ── ĐỢT 1: 1AB+1AC+2BC ── */
+  {id:1, round:1, court:1, pairA:3, pairB:15},  /* A3(Quang+Yên) vs B3(Giang (Ginny RH)+Đông) [AB] */
+  {id:2, round:1, court:2, pairA:8, pairB:32},  /* A8(Quí+Nguyên) vs C8(Tú+Trang Lu) [AC] */
+  {id:3, round:1, court:3, pairA:16, pairB:28},  /* B4(Hiền+Trang) vs C4(Cường+Tường) [BC] */
+  {id:4, round:1, court:4, pairA:21, pairB:33},  /* B9(Châu+Phong) vs C9(Duy+Trâm) [BC] */
+  /* ── ĐỢT 2: 2AB+1AC+1BC ── */
+  {id:5, round:2, court:1, pairA:4, pairB:16},  /* A4(Hà+Khoa) vs B4(Hiền+Trang) [AB] */
+  {id:6, round:2, court:2, pairA:8, pairB:20},  /* A8(Quí+Nguyên) vs B8(Châu+Thảo) [AB] */
+  {id:7, round:2, court:3, pairA:11, pairB:35},  /* A11(Tín+Thụy) vs C11(Duy+Trang Lu) [AC] */
+  {id:8, round:2, court:4, pairA:15, pairB:27},  /* B3(Giang (Ginny RH)+Đông) vs C3(Bảo+Trâm) [BC] */
   /* ── ĐỢT 3: 1AB+2AC+1BC ── */
-  {id:9, round:3, court:1, pairA:7, pairB:20},  /* A7(Thụy+Nguyên) vs B8(Châu+Thảo) [AB] */
-  {id:10, round:3, court:2, pairA:1, pairB:26},  /* A1(Hà+Yên) vs C2(Bảo+Tường) [AC] */
+  {id:9, round:3, court:1, pairA:5, pairB:17},  /* A5(Quang+Hà) vs B5(Trang+Đông) [AB] */
+  {id:10, round:3, court:2, pairA:2, pairB:26},  /* A2(Khoa+Yên) vs C2(Bảo+Tường) [AC] */
   {id:11, round:3, court:3, pairA:12, pairB:36},  /* A12(Tín+Quí) vs C12(Duy+Tú) [AC] */
-  {id:12, round:3, court:4, pairA:18, pairB:30},  /* B6(Hiền+Đông) vs C6(Trang Lu+Trâm) [BC] */
-  /* ── ĐỢT 4: 1AB+1AC+2BC ── */
-  {id:13, round:4, court:1, pairA:3, pairB:15},  /* A3(Quang+Yên) vs B3(Giang (Ginny RH)+Đông) [AB] */
-  {id:14, round:4, court:2, pairA:11, pairB:35},  /* A11(Tín+Thụy) vs C11(Duy+Trang Lu) [AC] */
-  {id:15, round:4, court:3, pairA:16, pairB:29},  /* B4(Hiền+Trang) vs C5(Bảo+Hạnh) [BC] */
-  {id:16, round:4, court:4, pairA:23, pairB:34},  /* B11(Phát+Phong) vs C10(Cường+Tú) [BC] */
-  /* ── ĐỢT 5: 2AB+1AC+1BC ── */
-  {id:17, round:5, court:1, pairA:2, pairB:14},  /* A2(Khoa+Yên) vs B2(Hiền+Giang (Ginny RH)) [AB] */
-  {id:18, round:5, court:2, pairA:11, pairB:23},  /* A11(Tín+Thụy) vs B11(Phát+Phong) [AB] */
-  {id:19, round:5, court:3, pairA:5, pairB:25},  /* A5(Quang+Hà) vs C1(Hạnh+Tường) [AC] */
-  {id:20, round:5, court:4, pairA:20, pairB:32},  /* B8(Châu+Thảo) vs C8(Tú+Trang Lu) [BC] */
-  /* ── ĐỢT 6: 1AB+1AC+2BC ── */
-  {id:21, round:6, court:1, pairA:10, pairB:22},  /* A10(Tín+Nguyên) vs B10(Phát+Thảo) [AB] */
-  {id:22, round:6, court:2, pairA:4, pairB:30},  /* A4(Hà+Khoa) vs C6(Trang Lu+Trâm) [AC] */
-  {id:23, round:6, court:3, pairA:17, pairB:26},  /* B5(Trang+Đông) vs C2(Bảo+Tường) [BC] */
-  {id:24, round:6, court:4, pairA:21, pairB:31},  /* B9(Châu+Phong) vs C7(Cường+Hạnh) [BC] */
-  /* ── ĐỢT 7: 2AB+1AC+1BC ── */
-  {id:25, round:7, court:1, pairA:1, pairB:13},  /* A1(Hà+Yên) vs B1(Trang+Giang (Ginny RH)) [AB] */
-  {id:26, round:7, court:2, pairA:9, pairB:21},  /* A9(Quí+Thụy) vs B9(Châu+Phong) [AB] */
-  {id:27, round:7, court:3, pairA:6, pairB:29},  /* A6(Quang+Khoa) vs C5(Bảo+Hạnh) [AC] */
-  {id:28, round:7, court:4, pairA:22, pairB:36},  /* B10(Phát+Thảo) vs C12(Duy+Tú) [BC] */
-  /* ── ĐỢT 8: 2AB+1AC+1BC ── */
-  {id:29, round:8, court:1, pairA:5, pairB:16},  /* A5(Quang+Hà) vs B4(Hiền+Trang) [AB] */
-  {id:30, round:8, court:2, pairA:12, pairB:24},  /* A12(Tín+Quí) vs B12(Phát+Châu) [AB] */
-  {id:31, round:8, court:3, pairA:7, pairB:31},  /* A7(Thụy+Nguyên) vs C7(Cường+Hạnh) [AC] */
-  {id:32, round:8, court:4, pairA:15, pairB:27},  /* B3(Giang (Ginny RH)+Đông) vs C3(Bảo+Trâm) [BC] */
+  {id:12, round:3, court:4, pairA:19, pairB:31},  /* B7(Thảo+Phong) vs C7(Cường+Hạnh) [BC] */
+  /* ── ĐỢT 4: 2AB+1AC+1BC ── */
+  {id:13, round:4, court:1, pairA:9, pairB:21},  /* A9(Quí+Thụy) vs B9(Châu+Phong) [AB] */
+  {id:14, round:4, court:2, pairA:10, pairB:22},  /* A10(Tín+Nguyên) vs B10(Phát+Thảo) [AB] */
+  {id:15, round:4, court:3, pairA:6, pairB:30},  /* A6(Quang+Khoa) vs C6(Trang Lu+Trâm) [AC] */
+  {id:16, round:4, court:4, pairA:14, pairB:26},  /* B2(Hiền+Giang (Ginny RH)) vs C2(Bảo+Tường) [BC] */
+  /* ── ĐỢT 5: 1AB+2AC+1BC ── */
+  {id:17, round:5, court:1, pairA:6, pairB:18},  /* A6(Quang+Khoa) vs B6(Hiền+Đông) [AB] */
+  {id:18, round:5, court:2, pairA:1, pairB:25},  /* A1(Hà+Yên) vs C1(Hạnh+Tường) [AC] */
+  {id:19, round:5, court:3, pairA:9, pairB:33},  /* A9(Quí+Thụy) vs C9(Duy+Trâm) [AC] */
+  {id:20, round:5, court:4, pairA:22, pairB:34},  /* B10(Phát+Thảo) vs C10(Cường+Tú) [BC] */
+  /* ── ĐỢT 6: 2AB+1AC+1BC ── */
+  {id:21, round:6, court:1, pairA:7, pairB:19},  /* A7(Thụy+Nguyên) vs B7(Thảo+Phong) [AB] */
+  {id:22, round:6, court:2, pairA:12, pairB:24},  /* A12(Tín+Quí) vs B12(Phát+Châu) [AB] */
+  {id:23, round:6, court:3, pairA:3, pairB:27},  /* A3(Quang+Yên) vs C3(Bảo+Trâm) [AC] */
+  {id:24, round:6, court:4, pairA:13, pairB:25},  /* B1(Trang+Giang (Ginny RH)) vs C1(Hạnh+Tường) [BC] */
+  /* ── ĐỢT 7: 1AB+2AC+1BC ── */
+  {id:25, round:7, court:1, pairA:2, pairB:14},  /* A2(Khoa+Yên) vs B2(Hiền+Giang (Ginny RH)) [AB] */
+  {id:26, round:7, court:2, pairA:5, pairB:29},  /* A5(Quang+Hà) vs C5(Bảo+Hạnh) [AC] */
+  {id:27, round:7, court:3, pairA:10, pairB:34},  /* A10(Tín+Nguyên) vs C10(Cường+Tú) [AC] */
+  {id:28, round:7, court:4, pairA:23, pairB:35},  /* B11(Phát+Phong) vs C11(Duy+Trang Lu) [BC] */
+  /* ── ĐỢT 8: 1AB+1AC+2BC ── */
+  {id:29, round:8, court:1, pairA:11, pairB:23},  /* A11(Tín+Thụy) vs B11(Phát+Phong) [AB] */
+  {id:30, round:8, court:2, pairA:4, pairB:28},  /* A4(Hà+Khoa) vs C4(Cường+Tường) [AC] */
+  {id:31, round:8, court:3, pairA:17, pairB:29},  /* B5(Trang+Đông) vs C5(Bảo+Hạnh) [BC] */
+  {id:32, round:8, court:4, pairA:20, pairB:32},  /* B8(Châu+Thảo) vs C8(Tú+Trang Lu) [BC] */
   /* ── ĐỢT 9: 1AB+1AC+2BC ── */
-  {id:33, round:9, court:1, pairA:8, pairB:19},  /* A8(Quí+Nguyên) vs B7(Thảo+Phong) [AB] */
-  {id:34, round:9, court:2, pairA:2, pairB:27},  /* A2(Khoa+Yên) vs C3(Bảo+Trâm) [AC] */
-  {id:35, round:9, court:3, pairA:14, pairB:28},  /* B2(Hiền+Giang (Ginny RH)) vs C4(Cường+Tường) [BC] */
-  {id:36, round:9, court:4, pairA:24, pairB:35},  /* B12(Phát+Châu) vs C11(Duy+Trang Lu) [BC] */
+  {id:33, round:9, court:1, pairA:1, pairB:13},  /* A1(Hà+Yên) vs B1(Trang+Giang (Ginny RH)) [AB] */
+  {id:34, round:9, court:2, pairA:7, pairB:31},  /* A7(Thụy+Nguyên) vs C7(Cường+Hạnh) [AC] */
+  {id:35, round:9, court:3, pairA:18, pairB:30},  /* B6(Hiền+Đông) vs C6(Trang Lu+Trâm) [BC] */
+  {id:36, round:9, court:4, pairA:24, pairB:36},  /* B12(Phát+Châu) vs C12(Duy+Tú) [BC] */
 ];
 
 /* ═══════════════════════════════════════════════════
    STATE
 ═══════════════════════════════════════════════════ */
 /* Version key — tăng khi có thay đổi format data không tương thích */
-const DATA_VERSION = 'v4r16';
-const STORAGE_KEY  = 'pkl_v4r16';
-const LOCK_KEY     = 'pkl_v4r16_locks';
-const PAIRS_KEY    = 'pkl_v4r16_pairs';
+const DATA_VERSION = 'v4r17';
+const STORAGE_KEY  = 'pkl_v4r17';
+const LOCK_KEY     = 'pkl_v4r17_locks';
+const PAIRS_KEY    = 'pkl_v4r17_pairs';
 
 /* pairs: mảng 36 phần tử runtime (A:1–12, B:13–24, C:25–36), clone từ DEFAULT */
 let pairs   = JSON.parse(JSON.stringify(DEFAULT_PAIRS));
@@ -1893,7 +1894,7 @@ function refreshUI() {
 }
 
 // Mỗi lần phát hành: tăng APP_BUILD ở đây VÀ trong version.json (cùng giá trị).
-const APP_BUILD = '2026-10-22-r17';
+const APP_BUILD = '2026-10-22-r18';
 
 // Tự phát hiện bản mới trên máy chủ (GitHub Pages có cache ~10 phút), lệch thì tải lại 1 lần.
 async function checkForUpdate() {
