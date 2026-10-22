@@ -1401,7 +1401,9 @@ function renderScheduleView() {
       <div style="font-weight:700;font-size:13.5px;margin-bottom:2px;display:flex;align-items:center;gap:6px;">
         <span>✅</span> Lịch thi đấu chính thức đã mở (3/3 đội đã xác nhận &amp; khóa)
       </div>
-      <div style="font-size:12px;">Nhập tỉ số cho từng trận rồi nhấn nút <strong>💾 Lưu</strong>. Bảng xếp hạng và thống kê sẽ tự động cập nhật.</div>
+      <div style="font-size:12px;">${refAuth
+        ? 'Nhập tỉ số cho từng trận rồi nhấn nút <strong>💾 Lưu</strong>. Bảng xếp hạng và thống kê sẽ tự động cập nhật. <button class="btn btn-xs" style="margin-left:6px;" onclick="lockRef()">🔒 Khóa lại</button>'
+        : 'Chỉ trọng tài có <strong>PIN</strong> mới được nhập tỉ số. <button class="btn btn-success btn-xs" style="margin-left:6px;" onclick="unlockRef()">🔑 Nhập PIN trọng tài</button>'}</div>
     </div>`;
   }
 
@@ -1519,12 +1521,14 @@ function renderScheduleView() {
           </div>
           <div class="score-row">
             ${teamBadge(teamA)}
-            <input class="score-in" type="number" id="sa-${m.id}" min="0" max="30" value="${sA}" placeholder="0">
+            <input class="score-in" type="number" id="sa-${m.id}" min="0" max="30" value="${sA}" placeholder="0"${refAuth?'':' disabled'}>
             <span style="color:#9ca3af;font-weight:700;">–</span>
-            <input class="score-in" type="number" id="sb-${m.id}" min="0" max="30" value="${sB}" placeholder="0">
+            <input class="score-in" type="number" id="sb-${m.id}" min="0" max="30" value="${sB}" placeholder="0"${refAuth?'':' disabled'}>
             ${teamBadge(teamB)}
-            <button class="btn btn-success btn-xs" onclick="saveScore(${m.id})">💾</button>
-            <button class="btn btn-danger btn-xs" id="reset-btn-${m.id}" onclick="resetScore(${m.id})" style="display:${hasDone?'inline-flex':'none'}">✕</button>
+            ${refAuth
+              ? `<button class="btn btn-success btn-xs" onclick="saveScore(${m.id})">💾</button>
+            <button class="btn btn-danger btn-xs" id="reset-btn-${m.id}" onclick="resetScore(${m.id})" style="display:${hasDone?'inline-flex':'none'}">✕</button>`
+              : `<button class="btn btn-xs" onclick="unlockRef()">🔒 Cần PIN</button>`}
             <span class="saved-badge" id="saved-${m.id}" style="${hasDone?'display:inline':''}">✔</span>
           </div>
         </div>`;
@@ -1557,7 +1561,26 @@ function renderScheduleView() {
   renderRounds(cont._activeRound);
 }
 
+/* Quyền nhập kết quả: PIN trọng tài (lưu theo tab trình duyệt, đóng tab là khóa lại) */
+const REF_PIN = '201026';
+let refAuth = sessionStorage.getItem('pkl_ref') === '1';
+function unlockRef(){
+  const pin = prompt('🔑 Nhập PIN trọng tài (6 chữ số) để nhập kết quả:');
+  if (pin === null) return false; /* Bấm Cancel */
+  if (pin !== REF_PIN) { alert('❌ PIN không đúng!'); return false; }
+  refAuth = true;
+  sessionStorage.setItem('pkl_ref', '1');
+  renderScheduleView();
+  return true;
+}
+function lockRef(){
+  refAuth = false;
+  sessionStorage.removeItem('pkl_ref');
+  renderScheduleView();
+}
+
 function saveScore(id){
+  if(!refAuth){ unlockRef(); return; }
   const sA=document.getElementById('sa-'+id)?.value.trim();
   const sB=document.getElementById('sb-'+id)?.value.trim();
   if(sA===''||sB===''){alert('Vui lòng nhập cả hai tỉ số!');return;}
@@ -1572,6 +1595,7 @@ function saveScore(id){
   if(document.getElementById('tab-standings').classList.contains('active')) renderStandings();
 }
 function resetScore(id){
+  if(!refAuth){ unlockRef(); return; }
   delete results[id];
   saveAll();
   const saEl=document.getElementById('sa-'+id); if(saEl) saEl.value='';
@@ -1894,7 +1918,7 @@ function refreshUI() {
 }
 
 // Mỗi lần phát hành: tăng APP_BUILD ở đây VÀ trong version.json (cùng giá trị).
-const APP_BUILD = '2026-10-22-r18';
+const APP_BUILD = '2026-10-22-r19';
 
 // Tự phát hiện bản mới trên máy chủ (GitHub Pages có cache ~10 phút), lệch thì tải lại 1 lần.
 async function checkForUpdate() {
